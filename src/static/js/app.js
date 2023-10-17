@@ -1,5 +1,5 @@
 function App() {
-    const { Container, Row, Col } = ReactBootstrap;
+    const { Container, Row, Col, Button} = ReactBootstrap;
     return (
         <Container>
             <Row>
@@ -47,22 +47,52 @@ function TodoListCard() {
         [items],
     );
 
+    const onDeleteAllItems = () => {
+        fetch('/items', {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                setItems([]);
+            } else {
+                console.error('Failed to delete all items');
+            }
+        })
+        .catch(error => {
+            console.error('Network error:', error);
+        });
+    };
+
     if (items === null) return 'Loading...';
 
     return (
         <React.Fragment>
-            <AddItemForm onNewItem={onNewItem} />
-            {items.length === 0 && (
-                <p className="text-center">No items yet! Add one above!</p>
-            )}
-            {items.map(item => (
-                <ItemDisplay
-                    item={item}
-                    key={item.id}
-                    onItemUpdate={onItemUpdate}
-                    onItemRemoval={onItemRemoval}
-                />
-            ))}
+            <div className='ToDoWrapper'>
+                <div className='ToDoHeader'>
+                    <h2 className="listHeading">T O D O</h2>
+                </div>
+                <AddItemForm onNewItem={onNewItem} />
+                
+                {items.length === 0 && (
+                    <p className="text-center">No Tasks yet! Add one above!</p>
+                )}
+                {items.map(item => (
+                    <ItemDisplay
+                        item={item}
+                        key={item.id}
+                        onItemUpdate={onItemUpdate}
+                        onItemRemoval={onItemRemoval}
+                    />
+                ))}
+                <button class="deleteButton-pushable" onClick={onDeleteAllItems}>
+                    <span class="deleteButton-shadow"></span>
+                    <span class="deleteButton-edge"></span>
+                    <span class="deleteButton-front text">
+                        Delete All
+                    </span>
+                </button>
+            </div>
         </React.Fragment>
     );
 }
@@ -96,7 +126,7 @@ function AddItemForm({ onNewItem }) {
                     value={newItem}
                     onChange={e => setNewItem(e.target.value)}
                     type="text"
-                    placeholder="New Item"
+                    placeholder="What is the task today?"
                     aria-describedby="basic-addon1"
                 />
                 <InputGroup.Append>
@@ -106,7 +136,7 @@ function AddItemForm({ onNewItem }) {
                         disabled={!newItem.length}
                         className={submitting ? 'disabled' : ''}
                     >
-                        {submitting ? 'Adding...' : 'Add Item'}
+                        {submitting ? 'Adding...' : '+'}
                     </Button>
                 </InputGroup.Append>
             </InputGroup>
@@ -115,7 +145,9 @@ function AddItemForm({ onNewItem }) {
 }
 
 function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
-    const { Container, Row, Col, Button } = ReactBootstrap;
+    const { Container, Row, Col, Button, Form } = ReactBootstrap;
+    const [editing, setEditing] = React.useState(false);
+    const [editedName, setEditedName] = React.useState(item.name);
 
     const toggleCompletion = () => {
         fetch(`/items/${item.id}`, {
@@ -136,6 +168,26 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
         );
     };
 
+    const editItem = () => {
+        setEditing(true);
+    };
+
+    const saveEdit = () => {
+        fetch(`/items/${item.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                name: editedName,
+                completed: item.completed,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(r => r.json())
+            .then(updatedItem => {
+                onItemUpdate(updatedItem);
+                setEditing(false);
+            });
+    };
+
     return (
         <Container fluid className={`item ${item.completed && 'completed'}`}>
             <Row>
@@ -153,22 +205,50 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
                     >
                         <i
                             className={`far ${
-                                item.completed ? 'fa-check-square' : 'fa-square'
+                                item.completed ? 'fa-check-square text-white fa-2x' : 'fa-square text-white fa-2x'
                             }`}
                         />
                     </Button>
                 </Col>
-                <Col xs={10} className="name">
-                    {item.name}
+                <Col xs={8} className={`name ${editing ? 'editing' : ''}`}>
+                    {editing ? (
+                        <React.Fragment>
+                            <Form.Control
+                                type="text"
+                                value={editedName}
+                                onChange={e => setEditedName(e.target.value)}
+                            />
+                            <Button
+                                size="sm"
+                                variant="success"
+                                onClick={saveEdit}
+                                className="saveButton"
+                            >
+                                Save
+                            </Button>
+                        </React.Fragment>
+                    ) : (
+                        item.name
+                    )}
                 </Col>
                 <Col xs={1} className="text-center remove">
+                    <Button
+                        size="sm"
+                        variant="link"
+                        onClick={editItem}
+                        aria-label="Edit Item"
+                    >
+                        <i className="fa fa-edit fa-2x" />
+                    </Button>
+                </Col>
+                <Col>
                     <Button
                         size="sm"
                         variant="link"
                         onClick={removeItem}
                         aria-label="Remove Item"
                     >
-                        <i className="fa fa-trash text-danger" />
+                        <i className="fa fa-trash text-danger fa-2x" />
                     </Button>
                 </Col>
             </Row>

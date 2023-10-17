@@ -124,6 +124,15 @@ async function removeItem(id) {
     });
 }
 
+async function deleteAllItems() {
+    return new Promise((acc, rej) => {
+        db.run('DELETE FROM todo_items', err => {
+            if (err) return rej(err);
+            acc();
+        });
+    });
+}
+
 module.exports = {
     init,
     teardown,
@@ -132,4 +141,5 @@ module.exports = {
     storeItem,
     updateItem,
     removeItem,
+    deleteAllItems,
 };

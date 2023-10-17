@@ -1,25 +1,197 @@
 body {
-    background-color: #f4f4f4;
+    background-color: #19191a;
     margin-top: 50px;
-    font-family: 'Lato';
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: white;
+    font-weight: 400;
 }
 
 .item {
-    background-color: white;
+    background-color: #19191a;
     padding: 15px;
     margin-bottom: 15px;
     border: transparent;
     border-radius: 5px;
-    box-shadow: 0 0 1em #ccc;
     transition: all .2s ease-in-out;
+    font-size: 20px;
+    box-shadow: 0 0 1em rgba(29, 16, 16, 0.562);
+    text-align: left;
+}
+
+.listHeading {
+    font-size: 70px;
+}
+
+/* CSS */
+.deleteButton-pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.deleteButton-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+.deleteButton-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    hsl(340deg 100% 16%) 0%,
+    hsl(340deg 100% 32%) 8%,
+    hsl(340deg 100% 32%) 92%,
+    hsl(340deg 100% 16%) 100%
+  );
+}
+
+.deleteButton-front {
+  display: block;
+  position: relative;
+  padding: 12px 27px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  background: hsl(345deg 100% 47%);
+  will-change: transform;
+  transform: translateY(-4px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+@media (min-width: 768px) {
+  .deleteButton-front {
+    font-size: 1.25rem;
+    padding: 12px 42px;
+  }
+}
+
+.deleteButton-pushable:hover {
+  filter: brightness(110%);
+  -webkit-filter: brightness(110%);
+}
+
+.deleteButton-pushable:hover .deleteButton-front {
+  transform: translateY(-6px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.deleteButton-pushable:active .deleteButton-front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.deleteButton-pushable:hover .deleteButton-shadow {
+  transform: translateY(4px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.deleteButton-pushable:active .deleteButton-shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.deleteButton-pushable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* CSS */
+.saveButton {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #27ae60;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 13px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+  scale: 0.8;
+}
+
+.saveButton:hover {
+  background-color: #1e8449;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.saveButton:active {
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.saveButton:hover {
+  box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
 }
 
 .item:hover {
-    box-shadow: 0 0 1em #aaa;
+    box-shadow: 0 0 1em rgba(29, 16, 16, 0.562);
 }
 
 .item.completed {
     text-decoration: line-through;
+    margin-left: -50px;
+    scale: 0.8
+}
+
+.ToDoWrapper {
+    background-color: #272931;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 0 1em rgba(29, 16, 16, 0.562);
+    text-align: center;
 }
 
 .toggles {
