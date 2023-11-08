@@ -197,6 +197,7 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
                         size="sm"
                         variant="link"
                         onClick={toggleCompletion}
+                        disabled
                         aria-label={
                             item.completed
                                 ? 'Mark item as incomplete'
@@ -222,6 +223,7 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
                                 size="sm"
                                 variant="success"
                                 onClick={saveEdit}
+                                disabled
                                 className="saveButton"
                             >
                                 Save
@@ -237,6 +239,7 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
                         variant="link"
                         onClick={editItem}
                         aria-label="Edit Item"
+                        disabled
                     >
                         <i className="fa fa-edit fa-2x" />
                     </Button>
@@ -246,6 +249,7 @@ function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
                         size="sm"
                         variant="link"
                         onClick={removeItem}
+                        disabled
                         aria-label="Remove Item"
                     >
                         <i className="fa fa-trash text-danger fa-2x" />
